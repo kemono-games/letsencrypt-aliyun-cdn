@@ -5,7 +5,7 @@ const {
   uploadDomainServerCertificate,
   setDomainServerCertificate,
 } = require('./lib/cdn');
-const { domains, beforeDays, useWildcardCert } = require('./lib/config');
+const { domains, beforeDays, useWildcardCert, forceUpdate } = require('./lib/config');
 
 async function main() {
   const domainsNeedToBeRenewed = {};
@@ -16,21 +16,34 @@ async function main() {
   for (let i = 0; i < domains.length; i++) {
     const currentDomainName = domains[i];
     let renewInfo;
-    try {
-      const { CertInfos: { CertInfo } } = await describeDomainCertificateInfo(currentDomainName);
-      const currentCert = CertInfo.find(o => o.ServerCertificateStatus === 'on');
-      if (currentCert) {
-        const expireTime = new Date(currentCert.CertExpireTime).getTime();
-        if (expireTime <= expireThreshold) {
-          renewInfo = currentCert;
+
+    if (forceUpdate) {
+      renewInfo = {
+        DomainName: currentDomainName,
+      };
+      console.log(`[${i + 1}/${domains.length}] ${currentDomainName} force to be renewed`);
+    } else {
+      try {
+        const {
+          CertInfos: { CertInfo },
+        } = await describeDomainCertificateInfo(currentDomainName);
+        const currentCert = CertInfo.find((o) => o.ServerCertificateStatus === 'on');
+        if (currentCert) {
+          const expireTime = new Date(currentCert.CertExpireTime).getTime();
+          if (expireTime <= expireThreshold) {
+            renewInfo = currentCert;
+          }
+        } else {
+          renewInfo = {
+            DomainName: currentDomainName,
+          };
         }
-      } else {
-        renewInfo = {
-          DomainName: currentDomainName,
-        };
+      } catch (e) {
+        console.error(e);
       }
-    } catch(e) {
-      console.error(e);
+      console.log(
+        `[${i + 1}/${domains.length}] ${currentDomainName} ${renewInfo ? 'need to be renewed' : 'is ok'}`,
+      );
     }
 
     if (renewInfo) {
