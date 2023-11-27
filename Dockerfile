@@ -1,7 +1,8 @@
-FROM node:alpine
+FROM node:20-alpine AS deps
 
-ADD . /srv/
+ADD package.json yarn.lock .yarnrc.yml /srv/
 
+RUN corepack enable
 RUN apk update && apk add ca-certificates wget && \
     wget https://github.com/go-acme/lego/releases/download/v4.2.0/lego_v4.2.0_linux_amd64.tar.gz -O /tmp/lego.tar.gz -q && \
     mkdir /tmp/lego && \
@@ -9,9 +10,9 @@ RUN apk update && apk add ca-certificates wget && \
     cp /tmp/lego/lego /srv/lego && \
     chmod +x /srv/lego && \
     cd /srv && \
-    npm i --production
+    yarn workspaces focus --all --production
 
-FROM node:alpine
+FROM node:20-alpine AS runner
 
 ENV DOMAINS example.com
 ENV EMAIL daxingplay@gmail.com
@@ -22,7 +23,9 @@ ENV ENDPOINT https://cdn.aliyuncs.com
 ENV API_VERSION 2018-05-10
 
 COPY docker/tasks/ /etc/periodic/
-COPY --from=0 /srv /srv
+COPY . /srv/
+COPY --from=deps /srv/node_modules /srv/node_modules
+COPY --from=deps /srv/lego /srv/lego
 
 RUN chmod -R +x /etc/periodic/ && \
     chmod +x /srv/docker/start.sh
