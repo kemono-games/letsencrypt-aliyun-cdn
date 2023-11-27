@@ -11,7 +11,8 @@
   "author": "daxingplay <daxingplay@gmail.com>",
   "scripts": {
     "test": "mocha",
-    "lint": "eslint lib test"
+    "lint": "eslint lib test",
+    "start": "node -r dotenv/config index.js"
   },
   "dependencies": {
     "@alicloud/pop-core": "^1.7.12",
