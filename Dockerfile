@@ -17,8 +17,8 @@ FROM node:20-alpine AS runner
 ENV DOMAINS example.com
 ENV EMAIL daxingplay@gmail.com
 ENV DNS_TYPE  dnspod
-ENV ACCESS_KEY_ID foo
-ENV ACCESS_SECRET bar
+ENV ALICLOUD_ACCESS_KEY foo
+ENV ALICLOUD_SECRET_KEY bar
 ENV ENDPOINT https://cdn.aliyuncs.com
 ENV API_VERSION 2018-05-10
 
