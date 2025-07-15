@@ -13,8 +13,8 @@
 ```bash
 
 $ docker pull registry.ap-southeast-1.aliyuncs.com/kemono/cert-manager
-$ docker run -e ALICLOUD_ACCESS_KEY='阿里云的 ACCESS KEY' \
-  -e ALICLOUD_SECRET_KEY='阿里云的 ACCESS SECRET' \
+$ docker run -e ACCESS_KEY_ID='阿里云的 ACCESS KEY' \
+  -e ACCESS_SECRET='阿里云的 ACCESS SECRET' \
   -e DOMAINS='example.com,cdn1.example.com,cdn2.example.com' \
   -e EMAIL='admin@example.com' \
   -e DNS_TYPE='dnspod' \
@@ -44,8 +44,8 @@ $ docker run -e ALICLOUD_ACCESS_KEY='阿里云的 ACCESS KEY' \
 
 ## 环境变量说明
 
-- `ALICLOUD_ACCESS_KEY`：阿里云的 ACCESS KEY，建议使用最小权限
-- `ALICLOUD_SECRET_KEY`：阿里云的 ACCESS SECRET，建议使用最小权限
+- `ACCESS_KEY_ID`：阿里云的 ACCESS KEY，建议使用最小权限
+- `ACCESS_SECRET`：阿里云的 ACCESS SECRET，建议使用最小权限
 - `DOMAINS`：需要申请证书的域名列表，这些域名也必须是正在使用阿里云 CDN 服务的，多个域名列表以英文逗号分隔，这些域名必须使用同一个 DNS 服务商
 - `DNS_TYPE`：上述域名所使用的 DNS 服务商
 - 根据 DNS 服务商的不同，需要配置额外的环境变量：

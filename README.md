@@ -15,8 +15,8 @@ Automatically apply and renew certificates for domains hosted on aliyun cdn. It 
 ```bash
 
 $ docker pull registry.ap-southeast-1.aliyuncs.com/kemono/cert-manager
-$ docker run -e ALICLOUD_ACCESS_KEY='ACCESS KEY for your aliyun account' \
-  -e ALICLOUD_SECRET_KEY='ACCESS SECRET for your aliyun account' \
+$ docker run -e ACCESS_KEY_ID='ACCESS KEY for your aliyun account' \
+  -e ACCESS_SECRET='ACCESS SECRET for your aliyun account' \
   -e DOMAINS='example.com,cdn1.example.com,cdn2.example.com' \
   -e EMAIL='admin@example.com' \
   -e DNS_TYPE='dnspod' \
@@ -46,8 +46,8 @@ RAM policy needed for this operation:
 
 ## Environment Viarables
 
-- `ALICLOUD_ACCESS_KEY`: ACCESS KEY for aliyun account, we suggest you to use ram account for minimum privileges.
-- `ALICLOUD_SECRET_KEY`: ACCESS SECRET for aliyun account.
+- `ACCESS_KEY_ID`: ACCESS KEY for aliyun account, we suggest you to use ram account for minimum privileges.
+- `ACCESS_SECRET`: ACCESS SECRET for aliyun account.
 - `DOMAINS`: The domains need to apply for free certs. These domains must be using aliyun CDN services already. Multiple domains should be separeted by comma, and they must use the same DNS provider.
 - `DNS_TYPE`: The DNS provider used by the domains above.
 - According to the DNS provider you use, you need to set different environment viarables for proper API token:
